@@ -55,7 +55,7 @@ public class VentanaPrincipal extends JFrame{
     JMenuItem exitMenuItem=new JMenuItem("Salir",KeyEvent.VK_S);
 
     fileMenu.add(openMenuItem);
-    fileMenu.addSeparador();
+    fileMenu.addSeparator();
     fileMenu.add(exitMenuItem);
 
     //Agregar action listener al menu salir(lambda)
@@ -81,9 +81,71 @@ public class VentanaPrincipal extends JFrame{
     helpMenu.setMnemonic(KeyEvent.VK_Y);
 
     JMenuItem indexMenuItem=new JMenuItem("Index",KeyEvent.VK_I);
-    JMenuItem aboutMenuItem=new JMenuItem("Acerca de ",KeyEvent.VK_A);
+    JMenuItem aboutMenuItem=new JMenuItem("Acerca de ",KeyEvent.VK_C);
+
+    //selecciona la tecla f1 para el menu index
+    KeyStroke f1Key=KeyStroke.getKeyStroke(KeyEvent.VK_F1,0);
+
+    helpMenu.add(indexMenuItem);
+    helpMenu.addSeparator();
+    helpMenu.add(aboutMenuItem);
+
+    //Selecciona actionlistener a index lambda
+    indexMenuItem.addActionListener(e ->
+      msgText.append("Has seleccionado Help >> menu Index,\n"));
+      return helpMenu;
+  }
+
+  private void createPopupMenu(){
+    //Crea menu emergente y agrega mouseListener al frame
+    //para que se muestre el menu emergente cuando el usuario hace Click derecho
+    JMenuItem popup1=new JMenuItem("Menu emergente 1");
+    JMenuItem popup2=new JMenuItem("Menu emergente 2");
+    JMenuItem popup3=new JMenuItem("Menu emergente 3");
+
+    //Crea actionlistener
+    ActionListener al=e -> {
+        JMenuItem menuItem=(JMenuItem)e.getSource();
+        String menuText=menuItem.getText();
+        String msg="Has seleccionado "+menuText+" .\n";
+        msgText.append(msg);
+    };
+    //Agrega el mismo actionlistener a los menus poup
+    popup1.addActionListener(al);
+    popup2.addActionListener(al);
+    popup3.addActionListener(al);
+
+    //agrega los elementos al popup
+    popupMenu.add(popup1);
+    popupMenu.add(popup2);
+    popupMenu.add(popup3);
+
+    //Crear mouseListener para mostrar el menu emergente
+    MouseListener ml=new MouseAdapter(){
+        @Override
+        public void mousePressed(MouseEvent e){
+          displayPopupMenu(e);
+        }
+        @Override
+        public void mouseReleased(MouseEvent e){
+          displayPopupMenu(e);
+        }
+    };
+
+    //agrega MouseListener a label y textArea
+    msgText.addMouseListener(ml);
+    msgLabel.addMouseListener(ml);
+  }
+
+  private void displayPopupMenu(MouseEvent e){
+    //Asegurarse que se muestra el popupMenu
+    if(e.isPopupTrigger()){
+      this.popupMenu.show(e.getComponent(),e.getX(),e.getY());
+    }
   }
   public static void main(String[] args){
-
+    VentanaPrincipal vPrincipal=new VentanaPrincipal("Ventana Principal");
+    vPrincipal.pack();
+    vPrincipal.setVisible(true);
   }
 }
